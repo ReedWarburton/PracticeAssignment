@@ -1,0 +1,94 @@
+<html>
+<Head>
+    <script src="https://unpkg.com/jspsych@7.3.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+    <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css"
+        rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+    <script src="stimulus.js"></script>
+</Head>
+<body>
+<script> 
+
+var jsPsych = initJsPsych({
+    on_finish: function() {
+    jsPsych.data.displayData();
+    }
+    })
+
+    var subject_id = Math.floor(Math.random()*100000);
+    
+    var fixation1 = {
+     type: jsPsychHtmlKeyboardResponse,
+     stimulus: '<p style="font-size: 48px;">+</p>',
+     choices: "NO_KEYS",
+     trial_duration: 1000,
+     data: { typeoftrial: 'fixation',
+      list_number: jsPsych.timelineVariable('list'),
+      trialcondition: jsPsych.timelineVariable('prime_condition'),
+      subject: subject_id
+        }
+    }
+
+    var prom = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: jsPsych.timelineVariable('prompt'),
+    choices: " ",
+    data: { typeoftrial: 'prompt',
+      list_number: jsPsych.timelineVariable('list'),
+      trialcondition: jsPsych.timelineVariable('prime_condition'),
+      subject: subject_id
+        }
+    }
+
+    var prime = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: jsPsych.timelineVariable('prime_given'),
+    choices: "NO_KEYS",
+     trial_duration: 500,
+    data: { typeoftrial: 'prime',
+      list_number: jsPsych.timelineVariable('list'),
+      trialcondition: jsPsych.timelineVariable('prime_condition'),
+      subject: subject_id
+        }
+    }
+
+    var retrievalstate = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "Do you know the answer?",
+    choices: ["Y", "N"],
+    data: { typeoftrial: 'retreivalstate',
+      list_number: jsPsych.timelineVariable('list'),
+      trialcondition: jsPsych.timelineVariable('prime_condition'),
+      subject: subject_id
+        }
+    }
+
+    var retrevial = {
+     type: jsPsychHtmlKeyboardResponse,
+     stimulus: jsPsych.timelineVariable('target'),
+     choices: "NO_KEYS",
+     trial_duration: 2000,
+     data: { typeoftrial: 'retrieval',
+      list_number: jsPsych.timelineVariable('list'),
+      trialcondition: jsPsych.timelineVariable('prime_condition'),
+      subject: subject_id
+        }
+    }
+
+
+jsPsych.run([fixation1, prom, prime, retrievalstate, retrevial]);
+
+    var experiment_procedure = {
+    timeline: [fixation1, prom, prime, retrievalstate, retrevial],
+    timeline_variables: stimulus,
+    randomize_order: true
+    };
+    jsPsych.run([experiment_procedure]);
+
+
+    
+
+</script>
+</body>
+</html>
